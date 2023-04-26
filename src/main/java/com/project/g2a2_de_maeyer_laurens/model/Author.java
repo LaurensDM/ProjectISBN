@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "author")
-public class Author {
+public class Author implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "firstname")
     @NotBlank
@@ -31,7 +33,7 @@ public class Author {
     public Author() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -49,5 +51,21 @@ public class Author {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Author author)) return false;
+
+        if (!firstname.equals(author.firstname)) return false;
+        return lastname.equals(author.lastname);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = firstname.hashCode();
+        result = 31 * result + lastname.hashCode();
+        return result;
     }
 }

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{addBook}">Add a new book</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+<body>
+<form method="post" th:action="@{/books/new}" th:object="${book}" data-bitwarden-watching="1">
+    <h2 th:text="#{addBook}"></h2>
+  <div class="form-group m-5">
+    <label for="name" th:text="#{title}"></label>
+    <input type="text" id="name" name="name" th:value="*{name}" class="form-control ms-5 me-5" th:placeholder="#{title}"
+           required>
+  </div>
+    <div th:each="author, status : *{authors}" class="form-group m-5" id="authorContainer">
+        <label th:text="#{author} + (${status.index} + 1) + ':'"></label>
+        <input type="text" th:field="*{authors[__${status.index}__].firstname}" placeholder="First name" class="form-control ms-5 me-5"/>
+        <input type="text" th:field="*{authors[__${status.index}__].lastname}" placeholder="Last name"
+               class="form-control ms-5 me-5"/>
+        <br/>
+    </div>
+
+  <div class="form-group m-5">
+    <label for="ISBNnumber" th:text="ISBN"></label>
+    <input type="text" id="ISBNnumber" name="ISBNnumber" th:value="*{ISBNnumber}" class="form-control ms-5 me-5" th:placeholder="ISBN"
+           required>
+
+    <label for="price" th:text="#{price}"></label>
+    <input type="number" id="price" name="price" th:value="*{price}" class="form-control ms-5 me-5" th:placeholder="#{price}"
+           required>
+  </div>
+    <div th:each="location, status : *{locations}" class="form-group m-5" id="locationContainer">
+        <label th:text="'Location ' + (${status.index} + 1) + ':'"></label>
+        <input type="text" th:field="*{locations[__${status.index}__].placeCode1}" th:placeholder="#{placeCode}"
+               class="form-control ms-5 me-5"/>
+        <input type="text" th:field="*{locations[__${status.index}__].placeCode2}" th:placeholder="#{placeCode}"
+               class="form-control ms-5 me-5"/>
+        <input type="text" th:field="*{locations[__${status.index}__].placeName}" th:placeholder="#{placeName}"
+               class="form-control ms-5 me-5"/>
+        <br/>
+    </div>
+
+    <button type="submit" class="btn btn-success ml-5" th:text="Submit"></button>
+</form>
+
+<!--adding html in thymeleaf does not work properly or th fields-->
+<!--<script th:inline="javascript">-->
+<!--    function addAuthor() {-->
+<!--        let index = [[${#lists.size(book.authors)}]];-->
+<!--        if (index < 3) {-->
+<!--            const authorHtml = `<label th:text="#{author} + (${index} + 1) + ':'"></label>` +-->
+<!--                `<input type="text" th:field="*{authors[__${index}__].firstname}" placeholder="First name" class="form-control ms-5 me-5"/>` +-->
+<!--                `<input type="text" th:field="*{authors[__${index}__].lastname}" placeholder="Last name" class="form-control ms-5 me-5"/>` +-->
+<!--                `<br />`;-->
+<!--          const element = document.getElementById("authorContainer").innerHTML += authorHtml;-->
+<!--          console.log(element);-->
+<!--          index += 1;-->
+<!--        }-->
+<!--    }-->
+
+<!--    function addLocation() {-->
+<!--        let index = [[${#lists.size(book.locations)}]];-->
+<!--      console.log(index)-->
+<!--        if (index < 3) {-->
+<!--            const locationHtml = `<label th:text="'Location ' + (${index} + 1) + ':'"></label>` +-->
+<!--                `<input type="text" th:field="*{locations[__${index}__].placeCode1}" th:placeholder="#{placeCode}" class="form-control ms-5 me-5"/>` +-->
+<!--                `<input type="text" th:field="*{locations[__${index}__].placeCode2}" th:placeholder="#{placeCode}" class="form-control ms-5 me-5"/>` +-->
+<!--                `<input type="text" th:field="*{locations[__${index}__].placeName}" th:placeholder="#{placeName}" class="form-control ms-5 me-5"/>` +-->
+<!--                `<br />`;-->
+<!--            //make locationHtml a DOM element-->
+
+
+<!--            const element = document.getElementById("locationContainer").innerHTML += locationHtml;-->
+<!--            console.log(element);-->
+<!--        index += 1;-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->
+</body>
+</html>

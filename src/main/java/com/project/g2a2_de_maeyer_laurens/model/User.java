@@ -5,14 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name = "firstname")
     @NotBlank
@@ -26,10 +27,6 @@ public class User {
 
     @Column(name = "password")
     private String password;
-
-    @Column (name = "salt")
-    private String salt;
-
     @Column(name = "email")
     @NotBlank
     private String email;
@@ -37,14 +34,14 @@ public class User {
     @Column(name = "role")
     private String role;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Book> books;
 
-    public User(String firstname, String lastname, String password, String salt, String email, String role) {
+    public User(String firstname, String lastname, String password, String email, String role) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.password = password;
-        this.salt = salt;
+//        this.salt = salt;
         this.email = email;
         this.role = role;
     }
@@ -52,7 +49,7 @@ public class User {
     public User() {
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
@@ -68,9 +65,9 @@ public class User {
         return password;
     }
 
-    public String getSalt() {
-        return salt;
-    }
+//    public String getSalt() {
+//        return salt;
+//    }
 
     public String getEmail() {
         return email;
@@ -80,7 +77,7 @@ public class User {
         return role;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -96,9 +93,9 @@ public class User {
         this.password = password;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
+//    public void setSalt(String salt) {
+//        this.salt = salt;
+//    }
 
     public void setEmail(String email) {
         this.email = email;

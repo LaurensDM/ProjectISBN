@@ -2,9 +2,11 @@ package com.project.g2a2_de_maeyer_laurens.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "location")
-public class Location {
+public class Location implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -18,7 +20,7 @@ public class Location {
     @Column(name = "placeName")
     private String placeName;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Book book;
 
 

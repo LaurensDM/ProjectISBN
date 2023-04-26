@@ -3,36 +3,38 @@ package com.project.g2a2_de_maeyer_laurens.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.format.annotation.NumberFormat;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "books")
-public class Book {
+public class Book implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(name = "name")
     @NotBlank
     @Size(min=3, max=128)
     private String name;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Author> authors;
     @Column(name = "ISBNnumber")
-    private long ISBNnumber;
+    private String ISBNnumber;
     @Column(name = "price")
     @NumberFormat(style = NumberFormat.Style.CURRENCY)
     private double price;
     @Column(name = "rating")
     private int rating;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Location> locations;
 
 
-    public Book(String name, List<Author> authors, long ISBNnumber, double price, int rating, List<Location> locations) {
+    public Book(String name, List<Author> authors, String ISBNnumber, double price, int rating, List<Location> locations) {
         this.name = name;
         this.authors = authors;
         this.ISBNnumber = ISBNnumber;
@@ -43,7 +45,7 @@ public class Book {
     public Book() {
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
@@ -56,7 +58,7 @@ public class Book {
         return authors;
     }
 
-    public long getISBNnumber() {
+    public String getISBNnumber() {
         return ISBNnumber;
     }
 
@@ -81,7 +83,7 @@ public class Book {
         this.authors = authors;
     }
 
-    public void setISBNnumber(long ISBNnumber) {
+    public void setISBNnumber(String ISBNnumber) {
         this.ISBNnumber = ISBNnumber;
     }
 
@@ -95,5 +97,18 @@ public class Book {
 
     public void setLocations(List<Location> locations) {
         this.locations = locations;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", authors=" + authors +
+                ", ISBNnumber='" + ISBNnumber + '\'' +
+                ", price=" + price +
+                ", rating=" + rating +
+                ", locations=" + locations +
+                '}';
     }
 }

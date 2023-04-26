@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,40 +15,38 @@
     <p th:text="|Locale : ${#locale}|"></p>
     <!--  list books with author and a link to a detail page-->
     <!--   and style the books with using bootstrap using .map-->
-
+    <div sec:authentication="name"></div>
+    <p sec:authentication="principal.authorities"></p>
     <h1>Books</h1>
     <table class="table table-striped">
         <thead>
         <tr>
             <th scope="col">Title</th>
-            <th scope="col">Author</th>
+            <th scope="col">Price</th>
             <th scope="col">Detail</th>
         </tr>
         </thead>
         <tbody>
-        {
-        #books.map(book -> {
-        <tr>
-            <td>${book.title}</td>
-            <td>${book.author}</td>
-            <td><a href="/books/${book.id}">Detail</a></td>
+        <tr th:each="book, status : ${bookList}">
+            <td th:text="${book.name}"></td>
+            <td th:text="${book.price}"></td>
+            <td><a th:href="@{/books/{path}(path=${book.id})}" th:text="Details"></a></td>
         </tr>
-        }
-        <tr>
-            <td>Book 1</td>
-            <td>Author 1</td>
-            <td><a href="/books/1">Detail</a></td>
-        </tr>
-        <tr>
-            <td>Book 2</td>
-            <td>Author 2</td>
-            <td><a href="/books/2">Detail</a></td>
-        </tr>
-        <tr>
-            <td>Book 3</td>
-            <td>Author 3</td>
-            <td><a href="/books/3">Detail</a></td>
-        </tr>
+<!--        <tr>-->
+<!--            <td>Book 1</td>-->
+<!--            <td>Author 1</td>-->
+<!--            <td><a href="/books/1">Detail</a></td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>Book 2</td>-->
+<!--            <td>Author 2</td>-->
+<!--            <td><a href="/books/2">Detail</a></td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>Book 3</td>-->
+<!--            <td>Author 3</td>-->
+<!--            <td><a href="/books/3">Detail</a></td>-->
+<!--        </tr>-->
         </tbody>
     </table>
 

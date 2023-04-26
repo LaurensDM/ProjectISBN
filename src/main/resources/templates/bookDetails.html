@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container" th:object="${book}">
+        <span sec:authentication="name">Bob</span>
+        <span sec:authentication="principal.authorities">[USER, ADMIN]</span>
+        <h1 th:text="${book.name}"></h1>
+        <p th:text="${book.ISBNnumber}"></p>
+        <p th:text="${book.price}"></p>
+        <p th:text="${book.rating}"></p>
+        <h2 th:text="#{author}"></h2>
+        <div th:each="author : ${book.getAuthors()}">
+            <p th:text="${author.firstname}"></p>
+            <p th:text="${author.lastname}"></p>
+        </div>
+        <h2>Location</h2>
+        <div th:each="location : ${book.getLocations()}">
+            <p th:text="${location.placeCode1}"></p>
+            <p th:text="${location.placeCode2}"></p>
+            <p th:text="${location.placeName}"></p>
+        </div>
+        <form method="get" th:action="@{/books}">
+            <button type="submit" class="btn btn-primary" th:text="Return"></button>
+        </form>
+    </div>
+
+</body>
+</html>

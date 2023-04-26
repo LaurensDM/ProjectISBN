@@ -6,6 +6,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 src/main/resources/application.properties
+src/main/java/com/project/g2a2_de_maeyer_laurens/seeds/*
 
 ### STS ###
 .apt_generated
