@@ -9,6 +9,8 @@ import com.project.g2a2_de_maeyer_laurens.repository.LocationRepository;
 import com.project.g2a2_de_maeyer_laurens.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,12 @@ public class BookServiceImpl implements BookService {
     private LocationRepository locationRepository;
 
     @Override
+    public int getCount() {
+        int count = (int) bookRepository.count();
+        return count;
+    }
+
+    @Override
     public Book getBookById(long id) {
         return bookRepository.findById(id).orElseThrow();
     }
@@ -37,11 +45,14 @@ public class BookServiceImpl implements BookService {
         return books;
     }
 
-
     @Override
-    public Book getBookByISBN(String isbn) {
-        return null;
+    public List<Book> getBooksByPage(Integer page) {
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        List<Book> books = bookRepository.findByPage(pageable);
+        System.out.println(books);
+        return books;
     }
+
 
     @Override
     public void addBook(Book book) {
@@ -76,7 +87,7 @@ public class BookServiceImpl implements BookService {
             throw new IllegalArgumentException("Author or location is empty");
         }
         Book newBook = new Book(book.getName(), authors, book.getISBNnumber(), book.getPrice(),0, locations);
-        System.out.println(newBook.toString());
+        System.out.println(newBook);
         bookRepository.save(newBook);
     }
 

@@ -62,10 +62,10 @@ public class Author implements Serializable {
         return lastname.equals(author.lastname);
     }
 
-    @Override
-    public int hashCode() {
-        int result = firstname.hashCode();
-        result = 31 * result + lastname.hashCode();
-        return result;
-    }
+//    @Override
+//    public int hashCode() {
+//        int result = firstname.hashCode();
+//        result = 31 * result + lastname.hashCode();
+//        return result;
+//    }
 }

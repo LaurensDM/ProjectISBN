@@ -19,7 +19,7 @@ public class AuthUserService implements UserDetailsService {
          if(user == null){
               throw new UsernameNotFoundException("User not found");
             }
-        System.out.println(user.toString());
+//        System.out.println(user);
         return new AuthUserDetails(user);
     }
 }

@@ -10,14 +10,39 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/books")
 public class BookController {
 
     @Autowired
     private BookService service;
+    List<Book> books = new ArrayList<>();
 
-    @GetMapping("/{id}")
+    @GetMapping("/{page}")
+    public String showBooksByPage(@PathVariable Integer page, Model model) {
+        if (page < 1) {
+            return "redirect:/books/1";
+        }
+        int count = service.getCount();
+        if (count - (page-1)*10 < 0) {
+            System.out.println(count);
+            System.out.println(page*10);
+            return "redirect:/books/" + (page - 1);
+
+        }
+        books = service.getBooksByPage(page);
+        if (books == null || books.isEmpty()) {
+            return "redirect:/error";
+        }
+        model.addAttribute("page", page);
+        model.addAttribute("bookList", books);
+        return "books";
+    }
+
+    @GetMapping("/detail/{id}")
     public String showBookById(@PathVariable Long id, Model model) {
         Book book = service.getBookById(id);
         if (book == null) {
@@ -29,8 +54,8 @@ public class BookController {
 
     @GetMapping
     public String getBooks(Model model) {
-        model.addAttribute("bookList", service.getAll());
-        return "books";
+//        model.addAttribute("bookList", service.getAll());
+        return "redirect:/books/1";
     }
 
     @PostMapping("/new")

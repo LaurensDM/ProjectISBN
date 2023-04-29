@@ -3,6 +3,7 @@ package com.project.g2a2_de_maeyer_laurens.controller;
 import com.project.g2a2_de_maeyer_laurens.model.Author;
 import com.project.g2a2_de_maeyer_laurens.model.Book;
 import com.project.g2a2_de_maeyer_laurens.model.Location;
+import com.project.g2a2_de_maeyer_laurens.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +16,9 @@ import java.util.List;
 @RequestMapping("/")
 public class ViewController {
 
-    @GetMapping
+    @RequestMapping("/")
     public String showHome() {
-        return "redirect:/books";
+        return "redirect:/books/1";
     }
 
     @RequestMapping("/book/new")
@@ -39,11 +40,17 @@ public class ViewController {
         model.addAttribute("book", book);
         return "newBook";
     }
-    @RequestMapping("/login")
+    @GetMapping ("/login")
     public String showLogin() {
         return "login";
     }
 
+    @GetMapping("/register")
+    public String showRegister(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
+        return "register";
+    }
 
 //    @GetMapping("/error")
 //    public String showError() {

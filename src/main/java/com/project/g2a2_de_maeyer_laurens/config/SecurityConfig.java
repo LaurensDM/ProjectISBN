@@ -26,14 +26,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
-                .authorizeHttpRequests().requestMatchers("/register").permitAll()
+                .authorizeHttpRequests().requestMatchers("/*","/books/*","/user/new").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/*").hasAuthority("USER")
+                .authorizeHttpRequests().requestMatchers("/resources/**").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/books/*").hasAuthority("USER")
+                .authorizeHttpRequests().requestMatchers("/login/**").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/book/new").hasAuthority("ADMIN")
-                .and().formLogin().successForwardUrl("/").and().build();
+                .authorizeHttpRequests().requestMatchers("/register/**").permitAll()
+                .and()
+                .authorizeHttpRequests().requestMatchers("/books/detail/*").hasAuthority("USER")
+                .and()
+                .authorizeHttpRequests().requestMatchers("/book/new","/books/new").hasAuthority("ADMIN")
+                .and().formLogin()
+                .defaultSuccessUrl("/books/1")
+//                .failureUrl("/error")
+                .permitAll()
+                .and().logout().permitAll()
+                .and()
+                .build();
 
     }
 

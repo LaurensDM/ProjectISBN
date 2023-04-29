@@ -20,8 +20,6 @@ public class AuthUserDetails implements UserDetails {
         this.password = user.getPassword();
         this.authorities = Arrays.stream(user.getRole().split(","))
                 .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-        System.out.println(authorities.get(0));
-        System.out.println(authorities.get(1));
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -17,18 +17,6 @@ import java.util.Locale;
 @EntityScan("com.project.g2a2_de_maeyer_laurens.*")
 public class G2A2DeMaeyerLaurensApplication  {
 
-    @Bean
-    public LocaleResolver localeResolver() {
-        SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(Locale.forLanguageTag("en"));
-        return slr;
-    }
-
-//    @Bean
-//    public BookService bookService() {
-//        return new BookServiceImpl();
-//    }
-
     public static void main(String[] args) {
         SpringApplication.run(G2A2DeMaeyerLaurensApplication.class, args);
     }

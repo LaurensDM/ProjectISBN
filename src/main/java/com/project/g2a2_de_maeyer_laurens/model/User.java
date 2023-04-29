@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,13 +38,18 @@ public class User implements Serializable {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Book> books;
 
-    public User(String firstname, String lastname, String password, String email, String role) {
+    public User(String firstname, String lastname, String password, String email, String role, List<Book> books) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.password = password;
 //        this.salt = salt;
         this.email = email;
         this.role = role;
+        this.books = books;
+    }
+
+    public User(String firstname, String lastname, String password, String email) {
+        this(firstname, lastname, password, email, "USER", new ArrayList<>());
     }
 
     public User() {
@@ -103,5 +109,30 @@ public class User implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public void addBook(Book book) {
+        this.books.add(book);
+    }
+
+    public void removeBook(Book book) {
+        this.books.remove(book);
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", books=" + books +
+                '}';
     }
 }

@@ -9,18 +9,14 @@ import java.util.List;
 
 
 public interface BookService {
-    public Book getBookById(long id);
-    public List<Book> getAll();
-//    public Book getBookByTitle(String title);
-//    public Book getBookByAuthor(Author author);
-//    public Book getBookByLocation(Location location);
-    public Book getBookByISBN(String isbn);
+    int getCount();
+    Book getBookById(long id);
+    List<Book> getBooksByPage(Integer page);
+    List<Book> getAll();
 
-    public void addBook(Book book);
+    void addBook(Book book);
 
-    public void updateBookById(long id);
+    void updateBookById(long id);
 
-    public void deleteBookById(long id);
-
-
+    void deleteBookById(long id);
 }

@@ -11,6 +11,9 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
+//@NamedQueries({
+//        @NamedQuery(name = "Book.findByPage",  query = "SELECT b FROM Book b order by b.rating desc offset (:page-1)*10 rows fetch next 10 rows only")
+//})
 @Table(name = "books")
 public class Book implements Serializable {
 
