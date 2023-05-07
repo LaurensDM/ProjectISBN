@@ -1,6 +1,7 @@
 package com.project.g2a2_de_maeyer_laurens.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -14,36 +15,41 @@ import java.util.List;
 //@NamedQueries({
 //        @NamedQuery(name = "Book.findByPage",  query = "SELECT b FROM Book b order by b.rating desc offset (:page-1)*10 rows fetch next 10 rows only")
 //})
-@Table(name = "books")
+@Table(name = "books", uniqueConstraints = @UniqueConstraint(columnNames = {"ISBNnumber"}))
 public class Book implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name")
-    @NotBlank
-    @Size(min=3, max=128)
+    @NotBlank(message = "{validation.book.name.notBlank}")
     private String name;
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Author> authors;
-    @Column(name = "ISBNnumber")
+    @Column(name = "ISBNnumber", unique = true)
+    @NotBlank(message = "{validation.book.isbn.notBlank}")
     private String ISBNnumber;
     @Column(name = "price")
     @NumberFormat(style = NumberFormat.Style.CURRENCY)
+    @DecimalMax(value = "99.99", message = "{validation.book.price.decimalMax}")
     private double price;
     @Column(name = "rating")
     private int rating;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Location> locations;
 
+    @ManyToMany(mappedBy = "books", cascade = CascadeType.ALL)
+    private List<User> users;
 
-    public Book(String name, List<Author> authors, String ISBNnumber, double price, int rating, List<Location> locations) {
+
+    public Book(String name, List<Author> authors, String ISBNnumber, double price, int rating, List<Location> locations, List<User> users) {
         this.name = name;
         this.authors = authors;
         this.ISBNnumber = ISBNnumber;
         this.price = price;
         this.rating = rating;
         this.locations = locations;
+        this.users = users;
     }
     public Book() {
     }
@@ -69,7 +75,7 @@ public class Book implements Serializable {
         return price;
     }
 
-    public double getRating() {
+    public int getRating() {
         return rating;
     }
 

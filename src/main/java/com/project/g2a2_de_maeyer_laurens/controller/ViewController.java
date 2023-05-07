@@ -4,6 +4,7 @@ import com.project.g2a2_de_maeyer_laurens.model.Author;
 import com.project.g2a2_de_maeyer_laurens.model.Book;
 import com.project.g2a2_de_maeyer_laurens.model.Location;
 import com.project.g2a2_de_maeyer_laurens.model.User;
+import com.project.g2a2_de_maeyer_laurens.validator.Registration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,8 +48,8 @@ public class ViewController {
 
     @GetMapping("/register")
     public String showRegister(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
+        Registration registration = new Registration();
+        model.addAttribute("registration", registration);
         return "register";
     }
 

@@ -3,6 +3,7 @@ package com.project.g2a2_de_maeyer_laurens.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "location")
@@ -12,10 +13,10 @@ public class Location implements Serializable {
     private long id;
 
     @Column(name = "placeCode1")
-    private String placeCode1;
+    private int placeCode1;
 
     @Column(name = "placeCode2")
-    private String placeCode2;
+    private int placeCode2;
 
     @Column(name = "placeName")
     private String placeName;
@@ -24,7 +25,7 @@ public class Location implements Serializable {
     private Book book;
 
 
-    public Location(String placeCode1, String placeCode2, String placeName) {
+    public Location(int placeCode1, int placeCode2, String placeName) {
         this.placeCode1 = placeCode1;
         this.placeCode2 = placeCode2;
         this.placeName = placeName;
@@ -37,11 +38,11 @@ public class Location implements Serializable {
         return id;
     }
 
-    public String getPlaceCode1() {
+    public int getPlaceCode1() {
         return placeCode1;
     }
 
-    public String getPlaceCode2() {
+    public int getPlaceCode2() {
         return placeCode2;
     }
 
@@ -49,15 +50,34 @@ public class Location implements Serializable {
         return placeName;
     }
 
-    public void setPlaceCode1(String placeCode1) {
+    public void setPlaceCode1(int placeCode1) {
         this.placeCode1 = placeCode1;
     }
 
-    public void setPlaceCode2(String placeCode2) {
+    public void setPlaceCode2(int placeCode2) {
         this.placeCode2 = placeCode2;
     }
 
     public void setPlaceName(String placeName) {
         this.placeName = placeName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Location location)) return false;
+
+        if (!Objects.equals(placeCode1, location.placeCode1)) return false;
+        if (!Objects.equals(placeCode2, location.placeCode2)) return false;
+        return Objects.equals(placeName, location.placeName);
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                ", placeCode1=" + placeCode1 +
+                ", placeCode2=" + placeCode2 +
+                ", placeName='" + placeName  +
+                '}';
     }
 }

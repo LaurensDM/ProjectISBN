@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "author")
@@ -15,14 +16,16 @@ public class Author implements Serializable {
 
     @Column(name = "firstname")
     @NotBlank
-    @Size(min=3, max=60)
+    @Size(min=2, max=60)
     private String firstname;
 
     @Column(name = "lastname")
     @NotBlank
-    @Size(min=3, max=60)
+    @Size(min=2, max=60)
     private String lastname;
 
+    @ManyToMany(mappedBy = "authors", cascade = CascadeType.ALL)
+    private List<Book> books;
 
 
     public Author(String firstname, String lastname) {

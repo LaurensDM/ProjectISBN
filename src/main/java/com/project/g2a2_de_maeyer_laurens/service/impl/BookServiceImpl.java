@@ -3,9 +3,11 @@ package com.project.g2a2_de_maeyer_laurens.service.impl;
 import com.project.g2a2_de_maeyer_laurens.model.Author;
 import com.project.g2a2_de_maeyer_laurens.model.Book;
 import com.project.g2a2_de_maeyer_laurens.model.Location;
+import com.project.g2a2_de_maeyer_laurens.model.User;
 import com.project.g2a2_de_maeyer_laurens.repository.AuthorRepository;
 import com.project.g2a2_de_maeyer_laurens.repository.BookRepository;
 import com.project.g2a2_de_maeyer_laurens.repository.LocationRepository;
+import com.project.g2a2_de_maeyer_laurens.repository.UserRepository;
 import com.project.g2a2_de_maeyer_laurens.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -46,6 +48,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> getByAuthor(Author author) {
+        return bookRepository.findBooksByAuthors(author);
+    }
+
+    @Override
+    public Book getByISBN(String isbn) {
+        Book book = bookRepository.findByISBNnumber(isbn);
+        return book;
+    }
+
+    @Override
     public List<Book> getBooksByPage(Integer page) {
         Pageable pageable = PageRequest.of(page - 1, 10);
         List<Book> books = bookRepository.findByPage(pageable);
@@ -73,7 +86,8 @@ public class BookServiceImpl implements BookService {
             }
         }
         for (Location location : book.getLocations()) {
-            if (!location.getPlaceCode1().isBlank() && !location.getPlaceCode2().isBlank() && !location.getPlaceName().isBlank()){
+            System.out.println(location.toString());
+            if (!(location.getPlaceCode1()==0 || location.getPlaceCode2()==0 || location.getPlaceName().isBlank())){
                 if (databaseLocations.contains(location)){
                     System.out.println("LOCATION CONTAINS");
                     locations.add(databaseLocations.get(databaseLocations.indexOf(location)));
@@ -86,7 +100,7 @@ public class BookServiceImpl implements BookService {
         if (authors.isEmpty() || locations.isEmpty()){
             throw new IllegalArgumentException("Author or location is empty");
         }
-        Book newBook = new Book(book.getName(), authors, book.getISBNnumber(), book.getPrice(),0, locations);
+        Book newBook = new Book(book.getName(), authors, book.getISBNnumber(), book.getPrice(),0, locations, new ArrayList<>());
         System.out.println(newBook);
         bookRepository.save(newBook);
     }
@@ -100,5 +114,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBookById(long id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Book> getTop10() {
+        return bookRepository.findTop10ByOrderByRatingDescNameDesc();
+    }
+
+    @Override
+    public List<Book> getFavorites(User user){
+        return bookRepository.findBookByUsers(user);
     }
 }

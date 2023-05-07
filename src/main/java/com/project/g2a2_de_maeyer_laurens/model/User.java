@@ -38,7 +38,9 @@ public class User implements Serializable {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Book> books;
 
-    public User(String firstname, String lastname, String password, String email, String role, List<Book> books) {
+    private int maxFavorites;
+
+    public User(String firstname, String lastname, String password, String email, String role, List<Book> books, int maxFavorites) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.password = password;
@@ -46,10 +48,11 @@ public class User implements Serializable {
         this.email = email;
         this.role = role;
         this.books = books;
+        setMaxFavorites(maxFavorites);
     }
 
-    public User(String firstname, String lastname, String password, String email) {
-        this(firstname, lastname, password, email, "USER", new ArrayList<>());
+    public User(String firstname, String lastname, String password, String email ) {
+        this(firstname, lastname, password, email, "USER", new ArrayList<>(),10);
     }
 
     public User() {
@@ -83,6 +86,10 @@ public class User implements Serializable {
         return role;
     }
 
+    public int getMaxFavorites() {
+        return maxFavorites;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -99,9 +106,6 @@ public class User implements Serializable {
         this.password = password;
     }
 
-//    public void setSalt(String salt) {
-//        this.salt = salt;
-//    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -121,6 +125,10 @@ public class User implements Serializable {
 
     public List<Book> getBooks() {
         return books;
+    }
+
+    private void setMaxFavorites(int maxFavorites) {
+        this.maxFavorites = maxFavorites;
     }
 
     @Override

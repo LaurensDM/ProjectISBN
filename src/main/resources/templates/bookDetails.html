@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="d-flex flex-row gap-1" >
                     <p th:text="(#{price} + ': ')"></p>
-                    <p th:text="('€ '+${book.price})"></p>
+                    <p th:text="${book.price > 0 ? ('€ '+book.price) : 'No price specified'}"></p>
                 </div>
                 <div class="d-flex flex-row gap-1">
                     <p th:text="(#{rating}+': ')"></p>
@@ -31,9 +31,10 @@
                 </div>
                 <div class="d-flex flex-column gap-3 mb-5">
                     <h4 th:text="#{author}"></h4>
-                    <ul th:each="author : ${book.getAuthors()}" class="list-group ms-5 w-25">
+                    <ul th:each="author : ${book.getAuthors()}" class="list-group ms-5 w-50">
                         <li class="list-group-item" th:text="(${author.firstname} + ' ' + ${author.lastname})"></li>
                     </ul>
+                    <p th:if="${book.authors.isEmpty()}" th:text="Anoniem"></p>
                 </div>
                 <div class="d-flex flex-column gap-3 mb-2">
                     <h4 th:text="#{location}"></h4>
@@ -52,7 +53,12 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-outline-secondary" type="button" id="liveToastBtn">Add to favorite</button>
+                <form th:if="${user.books.size() < user.maxFavorites && !user.books.contains(book)}" method="post" id="addForm" th:action="@{/user/favorite/add/__${book.id}__}">
+                    <button class="btn btn-outline-secondary" th:text="#{addFav}" type="button" id="liveToastBtn" onclick="sendAddRequest()">Add to favorite</button>
+                </form>
+                <form th:if="${user.books.contains(book)} " method="post" id="rmForm" th:action="@{/user/favorite/remove/__${book.id}__}">
+                    <button  th:text="#{removeFav}" type="button" id="rmToastBtn"  class="btn btn-danger" onclick="sendRemoveRequest()"></button>
+                </form >
             </div>
         </div>
     </div>
@@ -70,11 +76,28 @@
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
-                <img src="..." class="rounded me-2" alt="...">
-                <strong class="me-auto">Library</strong>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+                </svg>
+                <strong class="ms-1 me-auto">Favorite</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
+            <div class="toast-body" th:text="#{toastAdd}">
+                You successfully added the book to your favorites!
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="rmToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-bookmark-dash-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM6 6a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1H6z"/>
+                </svg>
+                <strong class="ms-1 me-auto">Favorite</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" th:text="#{toastRemove}">
                 You successfully added the book to your favorites!
             </div>
         </div>
@@ -84,16 +107,60 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous">
 </script>
-<script>
-        const toastTrigger = document.getElementById('liveToastBtn')
-        const toastLiveExample = document.getElementById('liveToast')
+<script th:inline="javascript">
+    function sendAddRequest() {
+        // const request = new XMLHttpRequest();
+        console.log("test")
+        const form = document.getElementById("addForm");
+        const xhr = new XMLHttpRequest();
+        xhr.open(form.method, form.action);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            console.log(xhr)
+            if (xhr.status === 200) {
+                const toast = document.getElementById('liveToast');
+                const toastInstance = bootstrap.Toast.getOrCreateInstance(toast);
+                toastInstance.show();
+            }
+        };
+        xhr.send();
 
-        if (toastTrigger) {
-            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-            toastTrigger.addEventListener('click', () => {
-                toastBootstrap.show()
-            })
-        }
+    }
+
+    function sendRemoveRequest() {
+        // const request = new XMLHttpRequest();
+        const form = document.getElementById("rmForm");
+        const xhr = new XMLHttpRequest();
+        xhr.open(form.method, form.action);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const toast = document.getElementById('rmToast');
+                const toastInstance = bootstrap.Toast.getOrCreateInstance(toast);
+                toastInstance.show();
+            }
+        };
+        xhr.send();
+    }
+        // const toastTrigger = document.getElementById('liveToastBtn')
+        // const toastLiveExample = document.getElementById('liveToast')
+        //
+        // if (toastTrigger) {
+        //     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+        //     toastTrigger.addEventListener('click', () => {
+        //         toastBootstrap.show()
+        //     })
+        // }
+
+        // const toastRmTrigger = document.getElementById('rmToastBtn')
+        // const toastRmExample = document.getElementById('rmToast')
+        //
+        // if (toastRmTrigger) {
+        //     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastRmExample)
+        //     toastRmTrigger.addEventListener('click', () => {
+        //         toastBootstrap.show()
+        //     })
+        // }
 </script>
 </body>
 </html>
