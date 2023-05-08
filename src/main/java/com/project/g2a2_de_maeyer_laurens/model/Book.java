@@ -83,6 +83,17 @@ public class Book implements Serializable {
         return locations;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
     //generate setters for all attributes
     public void setName(String name) {
         this.name = name;
