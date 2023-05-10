@@ -1,5 +1,6 @@
 package com.project.g2a2_de_maeyer_laurens.controller;
 
+import com.project.g2a2_de_maeyer_laurens.model.Book;
 import com.project.g2a2_de_maeyer_laurens.model.User;
 import com.project.g2a2_de_maeyer_laurens.repository.UserRepository;
 import com.project.g2a2_de_maeyer_laurens.service.UserService;
@@ -8,6 +9,7 @@ import com.project.g2a2_de_maeyer_laurens.validator.RegistrationValidation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,26 +44,32 @@ public class UserController {
     }
 
     @PostMapping("/favorite/add/{id}")
-    public ResponseEntity<Void> addFavorite(@PathVariable("id") Long id) {
+    public String addFavorite(@PathVariable("id") Long id, Model model) {
         System.out.println("add favorite");
-       boolean response = userService.addFavorite(id);
+       Book response = userService.addFavorite(id);
         System.out.println("returning");
-        if (!response) {
-            System.err.println("bad request");
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
+
+        System.err.println("bad request");
+
+        User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()) ;
+        model.addAttribute("book", response);
+        model.addAttribute("user", user);
+        model.addAttribute("status", "added");
+        return "redirect:/books/detail/" + id+"?status=added";
     }
 
     @PostMapping("/favorite/remove/{id}")
-    public ResponseEntity<Void> removeFavorite(@PathVariable("id") Long id) {
+    public String removeFavorite(@PathVariable("id") Long id, Model model) {
         System.out.println("remove favorite");
-        boolean response = userService.removeFavorite(id);
+        Book response = userService.removeFavorite(id);
         System.out.println("returning");
-        if (!response) {
+//        if (!response) {
             System.err.println("bad request");
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
+//            return ResponseEntity.badRequest().build();
+//        }
+        User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()) ;
+        model.addAttribute("book", response);
+        model.addAttribute("user", user);
+        return "redirect:/books/detail/" + id+"?status=removed";
     }
 }

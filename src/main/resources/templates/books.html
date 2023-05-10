@@ -24,7 +24,6 @@
         <tr>
             <th scope="col">Title</th>
             <th scope="col">Author</th>
-            <th scope="col">Price</th>
             <th scope="col">Detail</th>
         </tr>
         </thead>
@@ -37,8 +36,6 @@
                     <li th:text="(${author.firstname} + ' ' + ${author.lastname})"></li>
                 </ul>
             </td>
-
-            <td th:text="${book.price > 0 ? ('€' + book.price) : 'No price specified'}"></td>
             <td><a th:href="@{/books/detail/{path}(path=${book.id})}" th:text="Details"></a></td>
         </tr>
 <!--        <tr>-->

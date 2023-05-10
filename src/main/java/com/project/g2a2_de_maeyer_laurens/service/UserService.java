@@ -1,5 +1,6 @@
 package com.project.g2a2_de_maeyer_laurens.service;
 
+import com.project.g2a2_de_maeyer_laurens.model.Book;
 import com.project.g2a2_de_maeyer_laurens.model.User;
 
 public interface UserService {
@@ -10,7 +11,7 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
-    boolean addFavorite(Long id);
+    Book addFavorite(Long id);
 
-    boolean removeFavorite(Long id);
+    Book removeFavorite(Long id);
 }

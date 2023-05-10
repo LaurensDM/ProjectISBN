@@ -42,33 +42,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addFavorite(Long id) {
+    public Book addFavorite(Long id) {
         Book book = bookRepository.findById(id).get();
         User user = repository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         if (user.getBooks().contains(book)) {
-            return false;
-        }
-        if (user.getMaxFavorites() == user.getBooks().size()) {
-            return false;
+            return null;
         }
         user.addBook(book);
         repository.save(user);
         book.setStarRating(book.getRating() + 1);
         bookRepository.save(book);
-        return true;
+        return book;
     }
 
     @Override
-    public boolean removeFavorite(Long id) {
+    public Book removeFavorite(Long id) {
         Book book = bookRepository.findById(id).get();
         User user = repository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         if (!user.getBooks().contains(book)) {
-            return false;
+            return null;
         }
         user.removeBook(book);
         repository.save(user);
         book.setStarRating(book.getRating() - 1);
         bookRepository.save(book);
-        return true;
+        return book;
     }
 }

@@ -118,7 +118,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getTop10() {
-        return bookRepository.findTop10ByOrderByRatingDescNameDesc();
+        return bookRepository.findTop10ByOrderByRatingDescNameAsc();
     }
 
     @Override
