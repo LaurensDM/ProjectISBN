@@ -57,13 +57,13 @@
                     </div>
                 </div>
                 <form
-                      th:if="${user.books.size() < user.maxFavorites && !user.books.contains(book)}" method="post"
+                      th:if="${user == null || (user.books.size() < user.maxFavorites && !user.books.contains(book))}" method="post"
                       id="addForm" th:action="@{/user/favorite/add/__${book.id}__}">
                     <button class="btn btn-outline-secondary" th:text="#{addFav}" type="submit" id="liveToastBtn">Add to
                         favorite
                     </button>
                 </form>
-                <form th:if="${user.books.contains(book)} " method="post" id="rmForm"
+                <form th:if="${user!=null && user.books.contains(book)} " method="post" id="rmForm"
                       th:action="@{/user/favorite/remove/__${book.id}__}">
                     <button th:text="#{removeFav}" type="submit" id="rmToastBtn" class="btn btn-danger"></button>
                 </form>

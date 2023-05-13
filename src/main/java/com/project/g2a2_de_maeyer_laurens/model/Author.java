@@ -48,6 +48,10 @@ public class Author implements Serializable {
         return lastname;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }

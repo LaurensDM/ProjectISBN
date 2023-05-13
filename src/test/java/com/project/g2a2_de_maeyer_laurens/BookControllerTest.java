@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -61,5 +62,23 @@ public class BookControllerTest {
 
 
     }
+
+    @WithMockUser(username = "random", authorities = {"USER"})
+    @Test
+    public void testShowBookById() throws Exception {
+//        Book book = new Book( "test", null, "123456789102",15,0,null,null);
+//        book.setId((long) 1);
+
+
+//        BookService bookService = Mockito.mock(BookService.class);
+//        Mockito.when(bookService.getBookById(1)).thenReturn(book);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/books/detail/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bookDetails"))
+                .andExpect(model().attributeExists("book"));
+//                .andExpect(model().attribute("book", book));
+    }
+
 
 }
