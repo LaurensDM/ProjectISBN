@@ -8,8 +8,8 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 <body>
-<div class="container-fluid vw-100 vh-100 bg-light">
-  <div class="d-flex justify-content-center align-items-center mt-5">
+<div class="container-fluid vw-100 vh-100 bg-light p-5">
+  <div class="d-flex justify-content-center align-items-center pt-5">
   <form class="d-flex flex-column w-50 gap-3 border border-light-subtle border-3 rounded" method="post" th:action="@{/user/new}" th:object="${registration}">
     <fieldset class="border-bottom border-2 border-light-subtle">
       <div class="text-center fw-bold fs-1 border-1 rounded bg-primary bg-gradient p-3 text-light w-100 mb-1" th:text="#{signup}"></div>
@@ -41,6 +41,7 @@
         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" th:value="*{confirmPassword}" th:placeholder="#{passwordConfirm}"
                  required="">
     </div>
+      <a th:href="@{/login}" th:text="#{loginExisting}"></a>
     </fieldset>
     <!--        <input name="_csrf" type="hidden"-->
     <!--               value="MB2eU54GlE29YLYRf0hQaGGJ6H_E3Yq89bjJNjO1vPT8bXrXVHj6Mv9l93qQUINzHWVkXAOxxUen7eiRl9v5D1XThcKaDh7l">-->
@@ -48,6 +49,7 @@
     <button class="btn btn-lg btn-primary btn-block ms-auto" type="submit" th:text="#{signup}"></button>
     </div>
   </form>
+
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"

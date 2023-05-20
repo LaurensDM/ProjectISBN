@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class G2A2DeMaeyerLaurensApplicationTests {
+class G2A3DeMaeyerLaurensApplicationTests {
 
     @Autowired
     private ViewController viewController;

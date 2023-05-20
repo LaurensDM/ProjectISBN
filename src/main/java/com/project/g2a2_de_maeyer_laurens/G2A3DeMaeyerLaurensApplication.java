@@ -11,16 +11,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
-import java.util.Locale;
 
 @SpringBootApplication
 @EnableJpaRepositories("com.project.g2a2_de_maeyer_laurens.*")
 @ComponentScan("com.project.g2a2_de_maeyer_laurens.*")
 @EntityScan("com.project.g2a2_de_maeyer_laurens.*")
-public class G2A2DeMaeyerLaurensApplication  {
+public class G2A3DeMaeyerLaurensApplication {
 
     @Bean
     public RegistrationValidation registrationValidation() {
@@ -33,7 +29,7 @@ public class G2A2DeMaeyerLaurensApplication  {
     }
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(G2A2DeMaeyerLaurensApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(G2A3DeMaeyerLaurensApplication.class, args);
         RestService restService = context.getBean(RestService.class);
         System.out.println(restService.getBookByIsbn("123456789").toString());
         for (Book book : restService.getBooksByAuthor(5).getBody()) {
