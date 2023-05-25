@@ -28,7 +28,7 @@
                        class="form-control ms-5 me-5 mb-1"/>
                 <input type="text" th:field="*{authors[__${status.index}__].lastname}" placeholder="Last name"
                        class="form-control ms-5 me-5"/>
-                <span th:errors="*{authors}"></span>
+                <span th:errors="*{authors}" class="text-danger"></span>
                 <br/>
             </div>
             <div class="form-group m-5">

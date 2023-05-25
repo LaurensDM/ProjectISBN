@@ -23,6 +23,15 @@ public class BookValidator implements Validator {
             if (author.getFirstname().isBlank() && author.getLastname().isBlank()) {
                 errors.rejectValue("authors", "author.primaryEmpty", "There must be a primary author!");
             }
+            for (int i = 0; i < book.getAuthors().size(); i++) {
+                Author author1 = book.getAuthors().get(i);
+                if (author1.getFirstname().isBlank() && !author1.getLastname().isBlank()) {
+                    errors.rejectValue("authors", "author.firstNameEmpty", "Every author must have a firstname!");
+                }
+                if (!author1.getFirstname().isBlank() && author1.getLastname().isBlank()) {
+                    errors.rejectValue("authors", "author.lastNameEmpty", "Every author must have a lastname!");
+                }
+            }
         }
         if (book.getISBNnumber().isEmpty()) {
             errors.rejectValue("ISBNnumber", "isbn.empty", "ISBN cannot be empty");
@@ -44,9 +53,12 @@ public class BookValidator implements Validator {
                 errors.rejectValue("locations", "location.primaryEmpty", "There must be a primary location!");
             }
             for (Location location : book.getLocations()) {
-                if (!(location.getPlaceCode1()==0 || location.getPlaceCode2()==0)) {
+                if (location.getPlaceCode1()!=0 || location.getPlaceCode2()!=0) {
                     if (location.getPlaceCode1() < 50 || location.getPlaceCode2() < 50) {
                         errors.rejectValue("locations", "location.code", "The place codes must be greater than 50!");
+                    }
+                    if (location.getPlaceCode1() > 300 || location.getPlaceCode2() > 300) {
+                        errors.rejectValue("locations", "location.code2", "The place codes must be smaller than 300!");
                     }
                     int result = Math.abs(location.getPlaceCode1() - location.getPlaceCode2());
                     if (result < 50) {
@@ -77,7 +89,7 @@ public class BookValidator implements Validator {
                     return false;
                 }
             }
-        } else {
+        } else if (isbn.length() == 13) {
             if (!isbn.matches("[0-9]+" )){
                 return false;
             }
@@ -90,6 +102,9 @@ public class BookValidator implements Validator {
                     sum += 3 * (c - '0');
                 }
             }
+        }
+        else {
+            return false;
         }
 
         System.out.println(sum);
